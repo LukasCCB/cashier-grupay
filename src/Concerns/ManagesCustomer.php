@@ -46,11 +46,11 @@ trait ManagesCustomer
         ]); // ['data'] ?? null
 
         // If we can't find the customer by email, we'll create them on GruPay...
-        if (data_get($response, 'success') === false) {
-            $response = Cashier::api('POST', 'customers', $options)['data'];
+        if ($response->status() === 404) {
+            $response = Cashier::api('POST', 'customers', $options);
         }
 
-        if (data_get($response, 'success') === true && Cashier::$customerModel::where('grupay_id', $response['data']['id'])->exists()) {
+        if (Cashier::$customerModel::where('grupay_id', $response['data']['id'])->exists()) {
             throw new LogicException("The GruPay customer [{$response['data']['id']}] already exists in the database.");
         }
 
