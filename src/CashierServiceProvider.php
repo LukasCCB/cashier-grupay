@@ -71,25 +71,23 @@ class CashierServiceProvider extends ServiceProvider
      */
     protected function bootPublishing ()
     {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__ . '/../config/cashier.php' => $this->app->configPath('cashier.php'),
-            ], 'cashier-config');
+        $this->publishes([
+            __DIR__ . '/../config/cashier.php' => $this->app->configPath('cashier.php'),
+        ], 'cashier-config');
 
-            $this->publishes([
-                __DIR__ . '/../database/migrations' => $this->app->databasePath('migrations'),
-            ], 'cashier-migrations');
+        $this->publishes([
+            __DIR__ . '/../database/migrations' => $this->app->databasePath('migrations'),
+        ], 'cashier-migrations');
 
-            $this->publishes([
-                __DIR__ . '/../resources/views' => $this->app->resourcePath('views/vendor/cashier'),
-            ], 'cashier-views');
+        $this->publishes([
+            __DIR__ . '/../resources/views' => $this->app->resourcePath('views/vendor/cashier'),
+        ], 'cashier-views');
 
-            $this->publishes([
-                __DIR__ . '/../config/cashier.php' => $this->app->configPath('cashier.php'),
-                __DIR__ . '/../database/migrations' => $this->app->databasePath('migrations'),
-                __DIR__ . '/../resources/views' => $this->app->resourcePath('views/vendor/cashier'),
-            ], 'cashier');
-        }
+        $this->publishes([
+            __DIR__ . '/../config/cashier.php' => $this->app->configPath('cashier.php'),
+            __DIR__ . '/../database/migrations' => $this->app->databasePath('migrations'),
+            __DIR__ . '/../resources/views' => $this->app->resourcePath('views/vendor/cashier'),
+        ], 'cashier');
     }
 
     /**
