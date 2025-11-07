@@ -11,7 +11,7 @@ class GruPayException extends Exception
      *
      * @var array
      */
-    protected array $error = [];
+    protected array $errors = [];
 
     /**
      * Get the error response from GruPay.
@@ -20,7 +20,7 @@ class GruPayException extends Exception
      */
     public function getError(): array
     {
-        return $this->error;
+        return $this->errors;
     }
 
     /**
@@ -31,7 +31,7 @@ class GruPayException extends Exception
      */
     public function setError(array $error): self
     {
-        $this->error = $error;
+        $this->errors = $error;
 
         return $this;
     }

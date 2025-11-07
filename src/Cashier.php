@@ -136,14 +136,14 @@ class Cashier
         ])
             ->$method("{$host}/{$uri}", $payload);
 
-        if (isset($response['message'])) {
+        if (isset($response['message']) || isset($response['errors']) ) {
             $message = "GruPay API error '{$response['message']}' occurred";
 
-            if (isset($response['message'])) {
-                $message .= ' with validation errors (' . json_encode($response['message']) . ')';
+            if (isset($response['errors'])) {
+                $message .= ' with validation errors (' . json_encode($response['errors']) . ')';
             }
 
-            throw (new GruPayException($message))->setError($response['message']);
+            throw (new GruPayException($message))->setError($response['errors']);
         }
 
         return $response;
