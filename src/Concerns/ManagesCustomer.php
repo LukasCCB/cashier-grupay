@@ -2,6 +2,7 @@
 
 namespace LukasCCB\GruPay\Concerns;
 
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use LukasCCB\GruPay\Cashier;
 use LogicException;
 use LukasCCB\GruPay\Customer;
@@ -68,9 +69,9 @@ trait ManagesCustomer
     /**
      * Get the customer related to the billable model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     * @return MorphOne
      */
-    public function customer()
+    public function customer(): MorphOne
     {
         return $this->morphOne(Cashier::$customerModel, 'billable');
     }

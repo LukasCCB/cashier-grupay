@@ -139,11 +139,11 @@ class Cashier
         if (isset($response['message'])) {
             $message = "GruPay API error '{$response['message']}' occurred";
 
-            if (isset($response['error']['errors'])) {
-                $message .= ' with validation errors (' . json_encode($response['error']['errors']) . ')';
+            if (isset($response['message'])) {
+                $message .= ' with validation errors (' . json_encode($response['message']) . ')';
             }
 
-            throw (new GruPayException($message))->setError($response['error']);
+            throw (new GruPayException($message))->setError($response['message']);
         }
 
         return $response;
