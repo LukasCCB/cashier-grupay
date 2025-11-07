@@ -1,0 +1,422 @@
+<?php
+
+namespace Laravel\GruPay;
+
+use Exception;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
+use Laravel\GruPay\Exceptions\GruPayException;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Formatter\IntlMoneyFormatter;
+use Money\Money;
+use NumberFormatter;
+
+class Cashier
+{
+    // https://documentation.grupay.app
+    const VERSION = 'v1';
+
+    /**
+     * The custom currency formatter.
+     *
+     * @var callable
+     */
+    protected static $formatCurrencyUsing;
+
+    /**
+     * Indicates if Cashier routes will be registered.
+     *
+     * @var bool
+     */
+    public static $registersRoutes = true;
+
+    /**
+     * Indicates if Cashier will mark past due subscriptions as invalid.
+     *
+     * @var bool
+     */
+    public static $deactivatePastDue = true;
+
+    /**
+     * The customer model class name.
+     *
+     * @var string
+     */
+    public static $customerModel = Customer::class;
+
+    /**
+     * The subscription model class name.
+     *
+     * @var string
+     */
+    public static $subscriptionModel = Subscription::class;
+
+    /**
+     * The subscription item model class name.
+     *
+     * @var string
+     */
+    public static $subscriptionItemModel = SubscriptionItem::class;
+
+    /**
+     * The transaction model class name.
+     *
+     * @var string
+     */
+    public static $transactionModel = Transaction::class;
+
+    /**
+     * Preview prices for a given set of items.
+     *
+     * @param array|string $items
+     * @param array        $options
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function previewPrices ($items, array $options = [])
+    {
+        $items = static::api('POST', 'pricing-preview', array_merge([
+            'items' => static::normalizeItems($items),
+        ], $options))['data']['details']['line_items'];
+
+        return collect($items)->map(function (array $item) {
+            return new PricePreview($item);
+        });
+    }
+
+    /**
+     * Get the customer instance by its GruPay customer ID.
+     *
+     * @param string $customerId
+     *
+     * @return Billable|null
+     */
+    public static function findBillable ($customerId)
+    {
+        return (new static::$customerModel)->where('grupay_id', $customerId)->first()?->billable;
+    }
+
+    /**
+     * Get the GruPay webhook url.
+     *
+     * @return string
+     */
+    public static function webhookUrl ()
+    {
+        return config('cashier.webhook') ?? route('cashier.webhook');
+    }
+
+    /**
+     * Perform a GruPay API call.
+     *
+     * @param string     $method
+     * @param string     $uri
+     * @param array|null $payload
+     *
+     * @return Response
+     *
+     * @throws GruPayException
+     */
+    public static function api ($method, $uri, ?array $payload = null)
+    {
+        if (empty($apiKey = config('cashier.client_token', config('cashier.api_key')))) {
+            throw new Exception('GruPay API key not set.');
+        }
+
+        $host = static::apiUrl();
+
+        /** @var Response $response */
+        $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'x-client-id' => config('cashier.client_token'),
+                'x-client-secret' => config('cashier.api_key')
+            ])
+            ->$method("{$host}/{$uri}", $payload);
+
+        if (isset($response['error'])) {
+            $message = "GruPay API error '{$response['error']['detail']}' occurred";
+
+            if (isset($response['error']['errors'])) {
+                $message .= ' with validation errors (' . json_encode($response['error']['errors']) . ')';
+            }
+
+            throw (new GruPayException($message))->setError($response['error']);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Get the GruPay API url.
+     *
+     * @return string
+     */
+    public static function apiUrl (): string
+    {
+        return 'https://api' . (config('cashier.sandbox') ? '-sandbox' : '') . '.grupay.app/'. self::VERSION;
+    }
+
+    /**
+     * Normalize the given items to a GruPay accepted format.
+     *
+     * @param array|string $items
+     * @param string       $priceKey
+     *
+     * @return array
+     */
+    public static function normalizeItems ($items, string $priceKey = 'price_id'): array
+    {
+        return collect($items)->map(function ($item, $key) use ($priceKey) {
+            if (is_array($item)) {
+                return $item;
+            }
+
+            if (is_string($key)) {
+                return [
+                    $priceKey => $key,
+                    'quantity' => $item,
+                ];
+            }
+
+            return [
+                $priceKey => $item,
+                'quantity' => 1,
+            ];
+        })->values()->all();
+    }
+
+    /**
+     * Set the custom currency formatter.
+     *
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public static function formatCurrencyUsing (callable $callback)
+    {
+        static::$formatCurrencyUsing = $callback;
+    }
+
+    /**
+     * Format the given amount into a displayable currency.
+     *
+     * @param int         $amount
+     * @param string      $currency
+     * @param string|null $locale
+     * @param array       $options
+     *
+     * @return string
+     */
+    public static function formatAmount ($amount, $currency, $locale = null, array $options = [])
+    {
+        if (static::$formatCurrencyUsing) {
+            return call_user_func(static::$formatCurrencyUsing, $amount, $currency, $locale, $options);
+        }
+
+        $money = new Money($amount, new Currency(strtoupper($currency)));
+
+        $locale = $locale ?? config('cashier.currency_locale');
+
+        $numberFormatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
+
+        if (isset($options['min_fraction_digits'])) {
+            $numberFormatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, $options['min_fraction_digits']);
+        }
+
+        $moneyFormatter = new IntlMoneyFormatter($numberFormatter, new ISOCurrencies());
+
+        return $moneyFormatter->format($money);
+    }
+
+    /**
+     * Determine if the given currency uses cents.
+     *
+     * @param \Money\Currency $currency
+     *
+     * @return bool
+     */
+    public static function currencyUsesCents (Currency $currency)
+    {
+        return !in_array($currency->getCode(), ['JPY', 'KRW'], true);
+    }
+
+    /**
+     * Configure Cashier to not register its routes.
+     *
+     * @return static
+     */
+    public static function ignoreRoutes ()
+    {
+        static::$registersRoutes = false;
+
+        return new static;
+    }
+
+    /**
+     * Configure Cashier to maintain past due subscriptions as active.
+     *
+     * @return static
+     */
+    public static function keepPastDueSubscriptionsActive ()
+    {
+        static::$deactivatePastDue = false;
+
+        return new static;
+    }
+
+    /**
+     * Set the customer model class name.
+     *
+     * @param string $customerModel
+     *
+     * @return void
+     */
+    public static function useCustomerModel ($customerModel)
+    {
+        static::$customerModel = $customerModel;
+    }
+
+    /**
+     * Set the subscription model class name.
+     *
+     * @param string $subscriptionModel
+     *
+     * @return void
+     */
+    public static function useSubscriptionModel ($subscriptionModel)
+    {
+        static::$subscriptionModel = $subscriptionModel;
+    }
+
+    /**
+     * Set the subscription item model class name.
+     *
+     * @param string $subscriptionItemModel
+     *
+     * @return void
+     */
+    public static function useSubscriptionItemModel ($subscriptionItemModel)
+    {
+        static::$subscriptionItemModel = $subscriptionItemModel;
+    }
+
+    /**
+     * Set the transaction model class name.
+     *
+     * @param string $transactionModel
+     *
+     * @return void
+     */
+    public static function useTransactionModel ($transactionModel)
+    {
+        static::$transactionModel = $transactionModel;
+    }
+
+    /**
+     * Create a fake Cashier instance.
+     *
+     * @return \Laravel\GruPay\CashierFake
+     */
+    public static function fake (...$arguments)
+    {
+        return CashierFake::fake(...$arguments);
+    }
+
+    /**
+     * Pass-thru to the CashierFake method of the same name.
+     *
+     * @param callable|int|null $callback
+     *
+     * @return void
+     */
+    public static function assertCustomerUpdated ($callback = null)
+    {
+        CashierFake::assertCustomerUpdated($callback);
+    }
+
+    /**
+     * Pass-thru to the CashierFake method of the same name.
+     *
+     * @param callable|int|null $callback
+     *
+     * @return void
+     */
+    public static function assertTransactionCompleted ($callback = null)
+    {
+        CashierFake::assertTransactionCompleted($callback);
+    }
+
+    /**
+     * Pass-thru to the CashierFake method of the same name.
+     *
+     * @param callable|int|null $callback
+     *
+     * @return void
+     */
+    public static function assertTransactionUpdated ($callback = null)
+    {
+        CashierFake::assertTransactionUpdated($callback);
+    }
+
+    /**
+     * Pass-thru to the CashierFake method of the same name.
+     *
+     * @param callable|int|null $callback
+     *
+     * @return void
+     */
+    public static function assertSubscriptionCreated ($callback = null)
+    {
+        CashierFake::assertSubscriptionCreated($callback);
+    }
+
+    /**
+     * Pass-thru to the CashierFake method of the same name.
+     *
+     * @param callable|int|null $callback
+     *
+     * @return void
+     */
+    public static function assertSubscriptionNotCreated ($callback = null)
+    {
+        CashierFake::assertSubscriptionNotCreated($callback);
+    }
+
+    /**
+     * Pass-thru to the CashierFake method of the same name.
+     *
+     * @param callable|int|null $callback
+     *
+     * @return void
+     */
+    public static function assertSubscriptionUpdated ($callback = null)
+    {
+        CashierFake::assertSubscriptionUpdated($callback);
+    }
+
+    /**
+     * Pass-thru to the CashierFake method of the same name.
+     *
+     * @param callable|int|null $callback
+     *
+     * @return void
+     */
+    public static function assertSubscriptionCanceled ($callback = null)
+    {
+        CashierFake::assertSubscriptionCanceled($callback);
+    }
+
+    /**
+     * Pass-thru to the CashierFake method of the same name.
+     *
+     * @param callable|int|null $callback
+     *
+     * @return void
+     */
+    public static function assertSubscriptionPaused ($callback = null)
+    {
+        CashierFake::assertSubscriptionPaused($callback);
+    }
+}
