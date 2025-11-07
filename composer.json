@@ -47,9 +47,6 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-main": "1.x-dev"
-        },
         "laravel": {
             "providers": [
                 "LukasCCB\\GruPay\\CashierServiceProvider"
