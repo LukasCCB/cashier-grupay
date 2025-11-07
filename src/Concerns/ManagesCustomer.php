@@ -46,7 +46,7 @@ trait ManagesCustomer
         ])['data'] ?? null;
 
         // If we can't find the customer by email, we'll create them on GruPay...
-        if (is_null($response)) {
+        if (data_get($response, 'errors')) {
             $response = Cashier::api('POST', 'customers', $options)['data'];
         }
 
