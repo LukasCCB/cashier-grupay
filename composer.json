@@ -1,5 +1,5 @@
 {
-    "name": "lukas-ccb/cashier-grupay",
+    "name": "lukasccb/cashier-grupay",
     "description": "Cashier GruPay provides an expressive, fluent interface to GruPay's subscription billing services.",
     "keywords": ["laravel", "grupay", "billing"],
     "license": "MIT",
