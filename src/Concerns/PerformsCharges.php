@@ -12,11 +12,12 @@ trait PerformsCharges
     /**
      * Get a checkout instance for a given list of prices.
      *
-     * @param  string|array  $prices
-     * @param  int  $quantity
-     * @return \LukasCCB\GruPay\Checkout
+     * @param array|string $prices
+     * @param  int         $quantity
+     *
+     * @return Checkout
      */
-    public function checkout($prices, int $quantity = 1)
+    public function checkout(array|string $prices, int $quantity = 1): Checkout
     {
         $customer = $this->createAsCustomer();
 
@@ -28,7 +29,8 @@ trait PerformsCharges
      *
      * @param  string|array  $prices
      * @param  string  $type
-     * @return \LukasCCB\GruPay\Checkout
+     *
+     * @return Checkout
      */
     public function subscribe($prices, string $type = Subscription::DEFAULT_TYPE)
     {
@@ -41,7 +43,7 @@ trait PerformsCharges
      * @param  int  $amount
      * @param  string  $name
      * @param  string  $type
-     * @return \LukasCCB\GruPay\SubscriptionBuilder
+     * @return SubscriptionBuilder
      */
     public function newSubscription(int $amount, string $name, string $type = Subscription::DEFAULT_TYPE)
     {
@@ -54,9 +56,10 @@ trait PerformsCharges
      * @param  int  $amount
      * @param  string  $name
      * @param  array  $options
-     * @return \LukasCCB\GruPay\Checkout
+     *
+     * @return Checkout
      */
-    public function charge(int $amount, string $name, array $options = [])
+    public function charge(int $amount, string $name, array $options = []): Checkout
     {
         return $this->chargeMany([array_replace_recursive([
             'price' => [
@@ -77,10 +80,11 @@ trait PerformsCharges
     /**
      * Creates a transaction for a "one-off" charge for the given items and returns a checkout instance.
      *
-     * @param  array  $items
-     * @return \LukasCCB\GruPay\Checkout
+     * @param  array $items
+     *
+     * @return Checkout
      */
-    public function chargeMany(array $items)
+    public function chargeMany(array $items): Checkout
     {
         $customer = $this->createAsCustomer();
 

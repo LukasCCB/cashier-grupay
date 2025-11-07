@@ -8,8 +8,8 @@ use LogicException;
 use Money\Currency;
 
 /**
- * @property \LukasCCB\GruPay\Billable $billable
- * @property \LukasCCB\GruPay\Subscription|null $subscription
+ * @property Billable          $billable
+ * @property Subscription|null $subscription
  */
 class Transaction extends Model
 {
@@ -42,7 +42,7 @@ class Transaction extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function billable()
+    public function billable ()
     {
         return $this->morphTo();
     }
@@ -52,7 +52,7 @@ class Transaction extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function subscription()
+    public function subscription ()
     {
         return $this->belongsTo(Cashier::$subscriptionModel, 'grupay_subscription_id', 'grupay_id');
     }
@@ -62,7 +62,7 @@ class Transaction extends Model
      *
      * @return string
      */
-    public function total()
+    public function total ()
     {
         return Cashier::formatAmount($this->total, $this->currency());
     }
@@ -72,7 +72,7 @@ class Transaction extends Model
      *
      * @return string
      */
-    public function tax()
+    public function tax ()
     {
         return Cashier::formatAmount($this->tax, $this->currency());
     }
@@ -82,7 +82,7 @@ class Transaction extends Model
      *
      * @return \Money\Currency
      */
-    public function currency(): Currency
+    public function currency (): Currency
     {
         return new Currency($this->currency);
     }
@@ -92,9 +92,9 @@ class Transaction extends Model
      *
      * @return string|null
      */
-    public function invoicePdf()
+    public function invoicePdf ()
     {
-        if (! $this->invoice_number) {
+        if (!$this->invoice_number) {
             return null;
         }
 
@@ -106,7 +106,7 @@ class Transaction extends Model
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function redirectToInvoicePdf()
+    public function redirectToInvoicePdf ()
     {
         if ($url = $this->invoicePdf()) {
             return redirect($url);
@@ -118,11 +118,12 @@ class Transaction extends Model
     /**
      * Refund the transaction for a given price and optional amount.
      *
-     * @param  string  $reason
-     * @param  string|array  $price
+     * @param string       $reason
+     * @param string|array $price
+     *
      * @return array
      */
-    public function refund($reason, $prices = [])
+    public function refund ($reason, $prices = [])
     {
         return $this->adjust('refund', $reason, $prices);
     }
@@ -130,11 +131,12 @@ class Transaction extends Model
     /**
      * Credit the transaction for a given price and optional amount.
      *
-     * @param  string  $reason
-     * @param  string|array  $price
+     * @param string       $reason
+     * @param string|array $price
+     *
      * @return array
      */
-    public function credit($reason, $prices = [])
+    public function credit ($reason, $prices = [])
     {
         return $this->adjust('credit', $reason, $prices);
     }
@@ -142,12 +144,13 @@ class Transaction extends Model
     /**
      * Adjust the transaction for a given price and optional amount.
      *
-     * @param  string  $type
-     * @param  string  $reason
-     * @param  string|array  $price
+     * @param string       $type
+     * @param string       $reason
+     * @param string|array $price
+     *
      * @return array
      */
-    public function adjust($type, $reason, $prices = [])
+    public function adjust ($type, $reason, $prices = [])
     {
         if ($this->status !== 'billed' && $this->status !== 'completed') {
             throw new LogicException('Only "billed" or "completed" transactions can be adjusted.');
@@ -155,7 +158,7 @@ class Transaction extends Model
 
         $lineItems = $this->asGruPayTransaction()['details']['line_items'];
 
-        $prices = (array) $prices;
+        $prices = (array)$prices;
 
         $items = collect($lineItems)
             ->filter(function (array $lineItem) use ($prices) {
@@ -202,7 +205,7 @@ class Transaction extends Model
      *
      * @return array
      */
-    public function asGruPayTransaction()
+    public function asGruPayTransaction ()
     {
         return Cashier::api('GET', "transactions/{$this->grupay_id}")['data'];
     }

@@ -4,15 +4,16 @@ namespace LukasCCB\GruPay\Concerns;
 
 use LukasCCB\GruPay\Cashier;
 use LogicException;
+use LukasCCB\GruPay\Customer;
 
 trait ManagesCustomer
 {
     /**
      * Create a GruPay customer for the given model.
      *
-     * @return \LukasCCB\GruPay\Customer
+     * @return Customer
      */
-    public function createAsCustomer(array $options = [])
+    public function createAsCustomer(array $options = []): Customer
     {
         if ($customer = $this->customer) {
             return $customer;
@@ -26,6 +27,10 @@ trait ManagesCustomer
             $options['email'] = $email;
         }
 
+        if (! isset($options['name'])) {
+            throw new LogicException('Unable to create GruPay customer without an name.');
+        }
+
         if (! isset($options['email'])) {
             throw new LogicException('Unable to create GruPay customer without an email.');
         }
@@ -36,9 +41,8 @@ trait ManagesCustomer
 
         // Attempt to find the customer by email address first...
         $response = Cashier::api('GET', 'customers', [
-            'status' => 'active,archived',
             'email' => $options['email'],
-        ])['data'][0] ?? null;
+        ])['data'] ?? null;
 
         // If we can't find the customer by email, we'll create them on GruPay...
         if (is_null($response)) {

@@ -4,6 +4,7 @@ namespace LukasCCB\GruPay;
 
 use Exception;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use LukasCCB\GruPay\Exceptions\GruPayException;
 use Money\Currencies\ISOCurrencies;
@@ -64,7 +65,7 @@ class Cashier
      *
      * @var string
      */
-    public static $transactionModel = Transaction::class;
+    public static string $transactionModel = Transaction::class;
 
     /**
      * Preview prices for a given set of items.
@@ -72,9 +73,9 @@ class Cashier
      * @param array|string $items
      * @param array        $options
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public static function previewPrices ($items, array $options = [])
+    public static function previewPrices ($items, array $options = []): Collection
     {
         $items = static::api('POST', 'pricing-preview', array_merge([
             'items' => static::normalizeItems($items),
@@ -102,7 +103,7 @@ class Cashier
      *
      * @return string
      */
-    public static function webhookUrl ()
+    public static function webhookUrl (): string
     {
         return config('cashier.webhook') ?? route('cashier.webhook');
     }
@@ -118,7 +119,7 @@ class Cashier
      *
      * @throws GruPayException
      */
-    public static function api ($method, $uri, ?array $payload = null)
+    public static function api (string $method, string $uri, ?array $payload = null): Response
     {
         if (empty($apiKey = config('cashier.client_token', config('cashier.api_key')))) {
             throw new Exception('GruPay API key not set.');
@@ -128,15 +129,15 @@ class Cashier
 
         /** @var Response $response */
         $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'x-client-id' => config('cashier.client_token'),
-                'x-client-secret' => config('cashier.api_key')
-            ])
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'x-client-id' => config('cashier.client_token'),
+            'x-client-secret' => config('cashier.api_key')
+        ])
             ->$method("{$host}/{$uri}", $payload);
 
-        if (isset($response['error'])) {
-            $message = "GruPay API error '{$response['error']['detail']}' occurred";
+        if (isset($response['message'])) {
+            $message = "GruPay API error '{$response['message']}' occurred";
 
             if (isset($response['error']['errors'])) {
                 $message .= ' with validation errors (' . json_encode($response['error']['errors']) . ')';
@@ -155,7 +156,7 @@ class Cashier
      */
     public static function apiUrl (): string
     {
-        return 'https://api' . (config('cashier.sandbox') ? '-sandbox' : '') . '.grupay.app/'. self::VERSION;
+        return 'https://api' . (config('cashier.sandbox') ? '-sandbox' : '') . '.grupay.app/' . self::VERSION;
     }
 
     /**
