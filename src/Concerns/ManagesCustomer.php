@@ -50,7 +50,7 @@ trait ManagesCustomer
             $response = Cashier::api('POST', 'customers', $options)['data'];
         }
 
-        if (Cashier::$customerModel::where('grupay_id', $response['data']['id'])->exists()) {
+        if (data_get($response, 'success') === true && Cashier::$customerModel::where('grupay_id', $response['data']['id'])->exists()) {
             throw new LogicException("The GruPay customer [{$response['data']['id']}] already exists in the database.");
         }
 
