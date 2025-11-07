@@ -15,10 +15,10 @@ class CashierServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register ()
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/cashier.php', 'cashier'
+            __DIR__ . '/../config/cashier.php', 'cashier'
         );
     }
 
@@ -27,7 +27,7 @@ class CashierServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot ()
     {
         $this->bootRoutes();
         $this->bootResources();
@@ -41,7 +41,7 @@ class CashierServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function bootRoutes()
+    protected function bootRoutes ()
     {
         if (Cashier::$registersRoutes) {
             Route::group([
@@ -49,7 +49,7 @@ class CashierServiceProvider extends ServiceProvider
                 'namespace' => 'LukasCCB\GruPay\Http\Controllers',
                 'as' => 'cashier.',
             ], function () {
-                $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+                $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
             });
         }
     }
@@ -59,9 +59,9 @@ class CashierServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function bootResources()
+    protected function bootResources ()
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'cashier');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'cashier');
     }
 
     /**
@@ -69,20 +69,26 @@ class CashierServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function bootPublishing()
+    protected function bootPublishing ()
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/cashier.php' => $this->app->configPath('cashier.php'),
+                __DIR__ . '/../config/cashier.php' => $this->app->configPath('cashier.php'),
             ], 'cashier-config');
 
             $this->publishes([
-                __DIR__.'/../database/migrations' => $this->app->databasePath('migrations'),
+                __DIR__ . '/../database/migrations' => $this->app->databasePath('migrations'),
             ], 'cashier-migrations');
 
             $this->publishes([
-                __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/cashier'),
+                __DIR__ . '/../resources/views' => $this->app->resourcePath('views/vendor/cashier'),
             ], 'cashier-views');
+
+            $this->publishes([
+                __DIR__ . '/../config/cashier.php' => $this->app->configPath('cashier.php'),
+                __DIR__ . '/../database/migrations' => $this->app->databasePath('migrations'),
+                __DIR__ . '/../resources/views' => $this->app->resourcePath('views/vendor/cashier'),
+            ], 'cashier');
         }
     }
 
@@ -91,12 +97,12 @@ class CashierServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function bootDirectives()
+    protected function bootDirectives ()
     {
         Blade::directive('grupayJS', function ($expression) {
             $expression = $expression ?: '[]';
 
-            return '<?php echo view("cashier::js", ["nonce" => '.$expression.'["nonce"] ?? ""]); ?>';
+            return '<?php echo view("cashier::js", ["nonce" => ' . $expression . '["nonce"] ?? ""]); ?>';
         });
     }
 
@@ -105,7 +111,7 @@ class CashierServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function bootComponents()
+    protected function bootComponents ()
     {
         Blade::component(Button::class, 'grupay-button');
         Blade::component(Checkout::class, 'grupay-checkout');

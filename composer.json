@@ -50,7 +50,7 @@
         "branch-alias": {
             "dev-main": "1.x-dev"
         },
-        "lukasccb": {
+        "laravel": {
             "providers": [
                 "LukasCCB\\GruPay\\CashierServiceProvider"
             ]
