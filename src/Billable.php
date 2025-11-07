@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
-use Laravel\GruPay\Concerns\ManagesCustomer;
-use Laravel\GruPay\Concerns\ManagesSubscriptions;
-use Laravel\GruPay\Concerns\ManagesTransactions;
-use Laravel\GruPay\Concerns\PerformsCharges;
+use LukasCCB\GruPay\Concerns\ManagesCustomer;
+use LukasCCB\GruPay\Concerns\ManagesSubscriptions;
+use LukasCCB\GruPay\Concerns\ManagesTransactions;
+use LukasCCB\GruPay\Concerns\PerformsCharges;
 
 trait Billable
 {

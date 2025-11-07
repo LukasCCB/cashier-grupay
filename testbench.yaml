@@ -1,5 +1,5 @@
 providers:
-  - Laravel\GruPay\CashierServiceProvider
+  - LukasCCB\GruPay\CashierServiceProvider
 
 migrations:
   - database/migrations

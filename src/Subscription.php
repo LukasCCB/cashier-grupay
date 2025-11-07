@@ -1,16 +1,16 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
-use Laravel\GruPay\Concerns\Prorates;
+use LukasCCB\GruPay\Concerns\Prorates;
 use LogicException;
 
 /**
- * @property \Laravel\GruPay\Billable $billable
+ * @property \LukasCCB\GruPay\Billable $billable
  */
 class Subscription extends Model
 {
@@ -78,7 +78,7 @@ class Subscription extends Model
      * Get the subscription item for the given price.
      *
      * @param  string  $price
-     * @return \Laravel\GruPay\SubscriptionItem
+     * @return \LukasCCB\GruPay\SubscriptionItem
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
@@ -91,7 +91,7 @@ class Subscription extends Model
      * Retrieve a specific item by price or the single item on a subscription.
      *
      * @param  string|null  $price
-     * @return \Laravel\GruPay\SubscriptionItem
+     * @return \LukasCCB\GruPay\SubscriptionItem
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @throws \InvalidArgumentException
@@ -526,7 +526,7 @@ class Subscription extends Model
      * Update the quantity of the subscription.
      *
      * @param  int  $quantity
-     * @param  \Laravel\GruPay\SubscriptionItem|string|null  $price
+     * @param  \LukasCCB\GruPay\SubscriptionItem|string|null  $price
      * @return $this
      */
     public function updateQuantity($quantity, $price = null)
@@ -880,7 +880,7 @@ class Subscription extends Model
     /**
      * Get the last payment for the subscription.
      *
-     * @return \Laravel\GruPay\Payment|null
+     * @return \LukasCCB\GruPay\Payment|null
      */
     public function lastPayment()
     {
@@ -892,7 +892,7 @@ class Subscription extends Model
     /**
      * Get the next payment for the subscription.
      *
-     * @return \Laravel\GruPay\Payment|null
+     * @return \LukasCCB\GruPay\Payment|null
      */
     public function nextPayment()
     {

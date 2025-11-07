@@ -1,12 +1,12 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Laravel\GruPay\Components\Button;
-use Laravel\GruPay\Components\Checkout;
+use LukasCCB\GruPay\Components\Button;
+use LukasCCB\GruPay\Components\Checkout;
 
 class CashierServiceProvider extends ServiceProvider
 {
@@ -46,7 +46,7 @@ class CashierServiceProvider extends ServiceProvider
         if (Cashier::$registersRoutes) {
             Route::group([
                 'prefix' => config('cashier.path'),
-                'namespace' => 'Laravel\GruPay\Http\Controllers',
+                'namespace' => 'LukasCCB\GruPay\Http\Controllers',
                 'as' => 'cashier.',
             ], function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');

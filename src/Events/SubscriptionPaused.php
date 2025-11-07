@@ -1,10 +1,10 @@
 <?php
 
-namespace Laravel\GruPay\Events;
+namespace LukasCCB\GruPay\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Laravel\GruPay\Subscription;
+use LukasCCB\GruPay\Subscription;
 
 class SubscriptionPaused
 {
@@ -13,7 +13,7 @@ class SubscriptionPaused
     /**
      * The subscription instance.
      *
-     * @var \Laravel\GruPay\Subscription
+     * @var \LukasCCB\GruPay\Subscription
      */
     public $subscription;
 
@@ -27,7 +27,7 @@ class SubscriptionPaused
     /**
      * Create a new event instance.
      *
-     * @param  \Laravel\GruPay\Subscription  $subscription
+     * @param  \LukasCCB\GruPay\Subscription  $subscription
      * @param  array  $payload
      * @return void
      */

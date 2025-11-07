@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\GruPay\Events;
+namespace LukasCCB\GruPay\Events;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Laravel\GruPay\Customer;
+use LukasCCB\GruPay\Customer;
 
 class CustomerUpdated
 {
@@ -21,7 +21,7 @@ class CustomerUpdated
     /**
      * The customer instance.
      *
-     * @var \Laravel\GruPay\Customer
+     * @var \LukasCCB\GruPay\Customer
      */
     public $customer;
 
@@ -36,7 +36,7 @@ class CustomerUpdated
      * Create a new event instance.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $billable
-     * @param  \Laravel\GruPay\Customer  $customer
+     * @param  \LukasCCB\GruPay\Customer  $customer
      * @param  array  $payload
      * @return void
      */

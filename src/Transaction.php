@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -8,8 +8,8 @@ use LogicException;
 use Money\Currency;
 
 /**
- * @property \Laravel\GruPay\Billable $billable
- * @property \Laravel\GruPay\Subscription|null $subscription
+ * @property \LukasCCB\GruPay\Billable $billable
+ * @property \LukasCCB\GruPay\Subscription|null $subscription
  */
 class Transaction extends Model
 {

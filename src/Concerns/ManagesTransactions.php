@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\GruPay\Concerns;
+namespace LukasCCB\GruPay\Concerns;
 
-use Laravel\GruPay\Cashier;
+use LukasCCB\GruPay\Cashier;
 
 trait ManagesTransactions
 {

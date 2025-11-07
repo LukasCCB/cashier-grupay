@@ -1,18 +1,18 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Laravel\GruPay\Events\CustomerUpdated;
-use Laravel\GruPay\Events\SubscriptionCanceled;
-use Laravel\GruPay\Events\SubscriptionCreated;
-use Laravel\GruPay\Events\SubscriptionPaused;
-use Laravel\GruPay\Events\SubscriptionUpdated;
-use Laravel\GruPay\Events\TransactionCompleted;
-use Laravel\GruPay\Events\TransactionUpdated;
+use LukasCCB\GruPay\Events\CustomerUpdated;
+use LukasCCB\GruPay\Events\SubscriptionCanceled;
+use LukasCCB\GruPay\Events\SubscriptionCreated;
+use LukasCCB\GruPay\Events\SubscriptionPaused;
+use LukasCCB\GruPay\Events\SubscriptionUpdated;
+use LukasCCB\GruPay\Events\TransactionCompleted;
+use LukasCCB\GruPay\Events\TransactionUpdated;
 
 class CashierFake
 {

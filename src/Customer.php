@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property \Laravel\GruPay\Billable $billable
+ * @property \LukasCCB\GruPay\Billable $billable
  */
 class Customer extends Model
 {

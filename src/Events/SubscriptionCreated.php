@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\GruPay\Events;
+namespace LukasCCB\GruPay\Events;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Laravel\GruPay\Subscription;
+use LukasCCB\GruPay\Subscription;
 
 class SubscriptionCreated
 {
@@ -21,7 +21,7 @@ class SubscriptionCreated
     /**
      * The subscription instance.
      *
-     * @var \Laravel\GruPay\Subscription
+     * @var \LukasCCB\GruPay\Subscription
      */
     public $subscription;
 
@@ -36,7 +36,7 @@ class SubscriptionCreated
      * Create a new event instance.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $billable
-     * @param  \Laravel\GruPay\Subscription  $subscription
+     * @param  \LukasCCB\GruPay\Subscription  $subscription
      * @param  array  $payload
      * @return void
      */

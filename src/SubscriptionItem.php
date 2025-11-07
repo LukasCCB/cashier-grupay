@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property \Laravel\GruPay\Subscription|null $subscription
+ * @property \LukasCCB\GruPay\Subscription|null $subscription
  */
 class SubscriptionItem extends Model
 {

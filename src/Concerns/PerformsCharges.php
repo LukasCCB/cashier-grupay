@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\GruPay\Concerns;
+namespace LukasCCB\GruPay\Concerns;
 
-use Laravel\GruPay\Cashier;
-use Laravel\GruPay\Checkout;
-use Laravel\GruPay\Subscription;
-use Laravel\GruPay\SubscriptionBuilder;
+use LukasCCB\GruPay\Cashier;
+use LukasCCB\GruPay\Checkout;
+use LukasCCB\GruPay\Subscription;
+use LukasCCB\GruPay\SubscriptionBuilder;
 
 trait PerformsCharges
 {
@@ -14,7 +14,7 @@ trait PerformsCharges
      *
      * @param  string|array  $prices
      * @param  int  $quantity
-     * @return \Laravel\GruPay\Checkout
+     * @return \LukasCCB\GruPay\Checkout
      */
     public function checkout($prices, int $quantity = 1)
     {
@@ -28,7 +28,7 @@ trait PerformsCharges
      *
      * @param  string|array  $prices
      * @param  string  $type
-     * @return \Laravel\GruPay\Checkout
+     * @return \LukasCCB\GruPay\Checkout
      */
     public function subscribe($prices, string $type = Subscription::DEFAULT_TYPE)
     {
@@ -41,7 +41,7 @@ trait PerformsCharges
      * @param  int  $amount
      * @param  string  $name
      * @param  string  $type
-     * @return \Laravel\GruPay\SubscriptionBuilder
+     * @return \LukasCCB\GruPay\SubscriptionBuilder
      */
     public function newSubscription(int $amount, string $name, string $type = Subscription::DEFAULT_TYPE)
     {
@@ -54,7 +54,7 @@ trait PerformsCharges
      * @param  int  $amount
      * @param  string  $name
      * @param  array  $options
-     * @return \Laravel\GruPay\Checkout
+     * @return \LukasCCB\GruPay\Checkout
      */
     public function charge(int $amount, string $name, array $options = [])
     {
@@ -78,7 +78,7 @@ trait PerformsCharges
      * Creates a transaction for a "one-off" charge for the given items and returns a checkout instance.
      *
      * @param  array  $items
-     * @return \Laravel\GruPay\Checkout
+     * @return \LukasCCB\GruPay\Checkout
      */
     public function chargeMany(array $items)
     {

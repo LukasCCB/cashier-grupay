@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\GruPay\Concerns;
+namespace LukasCCB\GruPay\Concerns;
 
 /**
  * @link https://developer.paddle.com/concepts/subscriptions/proration

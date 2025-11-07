@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -30,7 +30,7 @@ class PricePreview implements Arrayable, Jsonable, JsonSerializable
     /**
      * Get the price object for the preview.
      *
-     * @return \Laravel\GruPay\Price
+     * @return \LukasCCB\GruPay\Price
      */
     public function price()
     {

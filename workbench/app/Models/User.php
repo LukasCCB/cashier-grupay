@@ -3,7 +3,7 @@
 namespace Workbench\App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticable;
-use Laravel\GruPay\Billable;
+use LukasCCB\GruPay\Billable;
 
 class User extends Authenticable
 {

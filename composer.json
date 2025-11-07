@@ -3,6 +3,7 @@
     "description": "Cashier GruPay provides an expressive, fluent interface to GruPay's subscription billing services.",
     "keywords": ["laravel", "grupay", "billing"],
     "license": "MIT",
+    "version": "1.0.1",
     "authors": [
         {
             "name": "Lucas Silva",

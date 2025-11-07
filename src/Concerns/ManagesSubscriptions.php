@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravel\GruPay\Concerns;
+namespace LukasCCB\GruPay\Concerns;
 
-use Laravel\GruPay\Cashier;
-use Laravel\GruPay\Subscription;
+use LukasCCB\GruPay\Cashier;
+use LukasCCB\GruPay\Subscription;
 
 trait ManagesSubscriptions
 {
@@ -21,7 +21,7 @@ trait ManagesSubscriptions
      * Get a subscription instance by type.
      *
      * @param  string  $type
-     * @return \Laravel\GruPay\Subscription|null
+     * @return \LukasCCB\GruPay\Subscription|null
      */
     public function subscription($type = 'default')
     {

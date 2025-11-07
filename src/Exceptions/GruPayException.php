@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\GruPay\Exceptions;
+namespace LukasCCB\GruPay\Exceptions;
 
 use Exception;
 

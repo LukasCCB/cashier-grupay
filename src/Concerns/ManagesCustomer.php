@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\GruPay\Concerns;
+namespace LukasCCB\GruPay\Concerns;
 
-use Laravel\GruPay\Cashier;
+use LukasCCB\GruPay\Cashier;
 use LogicException;
 
 trait ManagesCustomer
@@ -10,7 +10,7 @@ trait ManagesCustomer
     /**
      * Create a GruPay customer for the given model.
      *
-     * @return \Laravel\GruPay\Customer
+     * @return \LukasCCB\GruPay\Customer
      */
     public function createAsCustomer(array $options = [])
     {

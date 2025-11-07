@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 use Exception;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use Laravel\GruPay\Exceptions\GruPayException;
+use LukasCCB\GruPay\Exceptions\GruPayException;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Formatter\IntlMoneyFormatter;
@@ -317,7 +317,7 @@ class Cashier
     /**
      * Create a fake Cashier instance.
      *
-     * @return \Laravel\GruPay\CashierFake
+     * @return \LukasCCB\GruPay\CashierFake
      */
     public static function fake (...$arguments)
     {

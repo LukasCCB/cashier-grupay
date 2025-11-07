@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 class SubscriptionBuilder
 {
@@ -21,7 +21,7 @@ class SubscriptionBuilder
     /**
      * Create a new subscription builder instance.
      *
-     * @param  \Laravel\GruPay\Billable  $billable
+     * @param  \LukasCCB\GruPay\Billable  $billable
      * @param  int  $amount
      * @param  string  $name
      * @param  string  $type
@@ -98,7 +98,7 @@ class SubscriptionBuilder
      * Get a new checkout instance for the subscription.
      *
      * @param  array  $options
-     * @return \Laravel\GruPay\Checkout
+     * @return \LukasCCB\GruPay\Checkout
      */
     public function checkout(array $options = [])
     {

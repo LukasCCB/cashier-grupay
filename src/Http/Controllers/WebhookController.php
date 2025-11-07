@@ -1,23 +1,23 @@
 <?php
 
-namespace Laravel\GruPay\Http\Controllers;
+namespace LukasCCB\GruPay\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
-use Laravel\GruPay\Cashier;
-use Laravel\GruPay\Events\CustomerUpdated;
-use Laravel\GruPay\Events\SubscriptionCanceled;
-use Laravel\GruPay\Events\SubscriptionCreated;
-use Laravel\GruPay\Events\SubscriptionPaused;
-use Laravel\GruPay\Events\SubscriptionUpdated;
-use Laravel\GruPay\Events\TransactionCompleted;
-use Laravel\GruPay\Events\TransactionUpdated;
-use Laravel\GruPay\Events\WebhookHandled;
-use Laravel\GruPay\Events\WebhookReceived;
-use Laravel\GruPay\Http\Middleware\VerifyWebhookSignature;
-use Laravel\GruPay\Subscription;
+use LukasCCB\GruPay\Cashier;
+use LukasCCB\GruPay\Events\CustomerUpdated;
+use LukasCCB\GruPay\Events\SubscriptionCanceled;
+use LukasCCB\GruPay\Events\SubscriptionCreated;
+use LukasCCB\GruPay\Events\SubscriptionPaused;
+use LukasCCB\GruPay\Events\SubscriptionUpdated;
+use LukasCCB\GruPay\Events\TransactionCompleted;
+use LukasCCB\GruPay\Events\TransactionUpdated;
+use LukasCCB\GruPay\Events\WebhookHandled;
+use LukasCCB\GruPay\Events\WebhookReceived;
+use LukasCCB\GruPay\Http\Middleware\VerifyWebhookSignature;
+use LukasCCB\GruPay\Subscription;
 use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
@@ -293,7 +293,7 @@ class WebhookController extends Controller
      * Get the customer instance by its GruPay customer ID.
      *
      * @param  string  $customerId
-     * @return \Laravel\GruPay\Billable|null
+     * @return \LukasCCB\GruPay\Billable|null
      */
     protected function findBillable($customerId)
     {
@@ -304,7 +304,7 @@ class WebhookController extends Controller
      * Find the first customer matching a GruPay customer ID.
      *
      * @param  string  $customerId
-     * @return \Laravel\GruPay\Customer|null
+     * @return \LukasCCB\GruPay\Customer|null
      */
     protected function findCustomer(string $customerId)
     {
@@ -315,7 +315,7 @@ class WebhookController extends Controller
      * Find the first subscription matching a GruPay subscription ID.
      *
      * @param  string  $subscriptionId
-     * @return \Laravel\GruPay\Subscription|null
+     * @return \LukasCCB\GruPay\Subscription|null
      */
     protected function findSubscription(string $subscriptionId)
     {
@@ -337,7 +337,7 @@ class WebhookController extends Controller
      * Find the first transaction matching a GruPay transaction ID.
      *
      * @param  string  $transactionId
-     * @return \Laravel\GruPay\Transaction|null
+     * @return \LukasCCB\GruPay\Transaction|null
      */
     protected function findTransaction(string $transactionId)
     {

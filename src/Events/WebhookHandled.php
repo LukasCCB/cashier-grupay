@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\GruPay\Events;
+namespace LukasCCB\GruPay\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;

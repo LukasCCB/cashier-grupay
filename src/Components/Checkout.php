@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravel\GruPay\Components;
+namespace LukasCCB\GruPay\Components;
 
 use Illuminate\View\Component;
-use Laravel\GruPay\Checkout as GruPayCheckout;
+use LukasCCB\GruPay\Checkout as GruPayCheckout;
 
 class Checkout extends Component
 {

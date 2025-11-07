@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 use Money\Currency;
 

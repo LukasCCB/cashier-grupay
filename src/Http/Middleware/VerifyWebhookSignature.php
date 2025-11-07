@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\GruPay\Http\Middleware;
+namespace LukasCCB\GruPay\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;

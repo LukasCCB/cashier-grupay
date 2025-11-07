@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\GruPay;
+namespace LukasCCB\GruPay;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
